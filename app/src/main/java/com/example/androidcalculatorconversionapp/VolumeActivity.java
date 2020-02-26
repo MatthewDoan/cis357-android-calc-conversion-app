@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,23 @@ public class VolumeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.volume_activity);
+
+        Intent intent  = getIntent();
+
+        String str = intent.getStringExtra("message_key");
+        String str2 = intent.getStringExtra("message_key2");
+
+        TextView fromText = (TextView) findViewById(R.id.gallonsText);
+        TextView toText = (TextView) findViewById(R.id.litersText);
+
+        if(str != null && str2 != null && !str.equals(str2)) {
+            fromText.setText(str);
+            toText.setText(str2);
+        }
+        else{
+            fromText.setText("Gallons");
+            toText.setText("Liters");
+        }
 
         //input fields
         EditText gallons = (EditText) findViewById(R.id.gallonsField);
@@ -41,19 +59,43 @@ public class VolumeActivity extends AppCompatActivity {
         calculateVol.setOnClickListener(y -> {
             try {
                 //gallons to liters
-                if(!(gallons.getText().toString()).matches("") && (liters.getText().toString()).matches("")){
+                if(!(gallons.getText().toString()).matches("") && (liters.getText().toString()).matches("")&& fromText.getText().toString().equals("Gallons") && toText.getText().toString().equals("Liters")){
                     liters.setText("");
                     int gallonsInt = Integer.parseInt(gallons.getText().toString());
                     double conversion = gallonsInt * 3.78541;
                     liters.setText(Double.toString(conversion));
                 }
-                //liters to gallons
-                else if((gallons.getText().toString()).matches("") && !(liters.getText().toString()).matches("")) {
-                    gallons.setText("");
-                    int litersInt = Integer.parseInt(liters.getText().toString());
-                    double conversions = litersInt * 0.264172;
-                    gallons.setText(Double.toString(conversions));
+               else if(!(gallons.getText().toString()).matches("") && (liters.getText().toString()).matches("")&& fromText.getText().toString().equals("Gallons") && toText.getText().toString().equals("Quarts")) {
+                    liters.setText("");
+                    int gallonsInt = Integer.parseInt(gallons.getText().toString());
+                    double conversion = gallonsInt * 4;
+                    liters.setText(Double.toString(conversion));
                 }
+                else if(!(gallons.getText().toString()).matches("") && (liters.getText().toString()).matches("")&& fromText.getText().toString().equals("Liters") && toText.getText().toString().equals("Gallons")){
+                    liters.setText("");
+                    int gallonsInt = Integer.parseInt(gallons.getText().toString());
+                    double conversion = gallonsInt * .264172;
+                    liters.setText(Double.toString(conversion));
+                }
+                else if(!(gallons.getText().toString()).matches("") && (liters.getText().toString()).matches("")&& fromText.getText().toString().equals("Liters") && toText.getText().toString().equals("Quarts")){
+                    liters.setText("");
+                    int gallonsInt = Integer.parseInt(gallons.getText().toString());
+                    double conversion = gallonsInt * 1.05669;
+                    liters.setText(Double.toString(conversion));
+                }
+                else if(!(gallons.getText().toString()).matches("") && (liters.getText().toString()).matches("")&& fromText.getText().toString().equals("Quarts") && toText.getText().toString().equals("Gallons")){
+                    liters.setText("");
+                    int gallonsInt = Integer.parseInt(gallons.getText().toString());
+                    double conversion = gallonsInt * .25;
+                    liters.setText(Double.toString(conversion));
+                }
+                else if(!(gallons.getText().toString()).matches("") && (liters.getText().toString()).matches("")&& fromText.getText().toString().equals("Quarts") && toText.getText().toString().equals("Liters")){
+                    liters.setText("");
+                    int gallonsInt = Integer.parseInt(gallons.getText().toString());
+                    double conversion = gallonsInt * .946353;
+                    liters.setText(Double.toString(conversion));
+                }
+
             } catch (NumberFormatException e) {
                 System.out.println("Not a valid input!");
             }
@@ -85,6 +127,11 @@ public class VolumeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent settings = new Intent(this, SettingsActivity.class);
+        String flag = "1";
+        settings.putExtra("flagKey", flag);
+        startActivity(settings);
         return super.onOptionsItemSelected(item);
     }
+
 }
